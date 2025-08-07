@@ -117,6 +117,7 @@
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
+      kdePackages.korganizer
     ];
   };
 
@@ -132,7 +133,7 @@
   services.tlp = {
     enable = true;
     settings = {
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
       PLATFORM_PROFILE_ON_BAT = "low-power";
@@ -145,10 +146,8 @@
 
       USB_AUTOSUSPEND = 0;
 
-      #May not work due to battery design
-      #nvm it works
-      START_CHARGE_THRESH_BAT0 = 40;
-      STOP_CHARGE_THRESH_BAT0 = 95;
+      START_CHARGE_THRESH_BAT0 = 60;
+      STOP_CHARGE_THRESH_BAT0 = 90;
     };
   };
 
@@ -158,26 +157,33 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    kdePackages.kdepim-addons
     pkgs.noto-fonts-cjk-sans
     pkgs.git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #pkgs.neovim
     wget
     pkgs.discord
     pkgs.tlp
     pkgs.libsForQt5.kdeconnect-kde
     pkgs.flatpak
-    vscode
-    pkgs.osu-lazer
-    pkgs.obs-studio
+    #pkgs.osu-lazer
+    #pkgs.obs-studio
     pkgs.lm_sensors
     pkgs.ytdownloader
-    pkgs.kdePackages.kdenlive
-    pkgs.gimp3
+    #pkgs.kdePackages.kdenlive
+    #pkgs.gimp3
     pkgs.spotify
     pkgs.bibata-cursors
     pkgs.kdePackages.partitionmanager
     pkgs.usbimager
     pkgs.ollama
+    pkgs.protonvpn-gui
+    pkgs.pciutils
+    pkgs.usbutils
+    #pkgs.dmidecode
+    pkgs.libgcc
+    pkgs.jdk24_headless
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -188,7 +194,7 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:  look i didnt know that this was here
+  # Enable services
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   #Auto updates
@@ -199,6 +205,8 @@
   nix.gc.dates = "daily";
   nix.gc.options = "delete-older-than 7d";
   nix.settings.auto-optimise-store = true;
+  #Flakes enabled
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
@@ -206,15 +214,16 @@
   # Open ports in the firewall.
   networking.firewall = {
     enable = true;
+    allowedTCPPorts = [ 80 443 ];
     allowedTCPPortRanges = [
       { from = 1714; to = 1764; } #KDE Connect
     ];
     allowedUDPPortRanges = [
       { from = 1714; to = 1764; } #KDE Connect
+      { from = 45000; to = 60000; } #discord vc ports
     ];
+    checkReversePath = false;
   };
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
