@@ -8,10 +8,12 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./flatpak.nix
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub.enable = true;
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
@@ -158,32 +160,40 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
-    pkgs.noto-fonts-cjk-sans
-    pkgs.git
+    noto-fonts-cjk-sans
+    git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #pkgs.neovim
     wget
-    pkgs.discord
-    pkgs.tlp
-    pkgs.libsForQt5.kdeconnect-kde
-    pkgs.flatpak
-    #pkgs.osu-lazer
-    #pkgs.obs-studio
-    pkgs.lm_sensors
-    pkgs.ytdownloader
-    #pkgs.kdePackages.kdenlive
-    #pkgs.gimp3
-    pkgs.spotify
-    pkgs.bibata-cursors
-    pkgs.kdePackages.partitionmanager
-    pkgs.usbimager
-    pkgs.ollama
-    pkgs.protonvpn-gui
-    pkgs.pciutils
-    pkgs.usbutils
-    #pkgs.dmidecode
-    pkgs.libgcc
-    pkgs.jdk24_headless
+    discord
+    tlp
+    kdePackages.kdeconnect-kde
+    flatpak
+    #osu-lazer
+    obs-studio
+    lm_sensors
+    ytdownloader
+    kdePackages.kdenlive
+    #gimp3
+    spotify
+    bibata-cursors
+    kdePackages.partitionmanager
+    usbimager
+    ollama
+    protonvpn-gui
+    pciutils
+    usbutils
+    #dmidecode
+    libgcc
+    alsa-utils
+    blocky
+    home-manager
+    distcc
+    hplip
+    lunar-client
+    jdk21_headless
+    mpv
+    ffmpeg
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -207,6 +217,46 @@
   nix.settings.auto-optimise-store = true;
   #Flakes enabled
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  #DNS blocker     (Doesn't fucking work half the time for some goddamn reason)
+  /*
+  services.blocky = {
+    enable = true;
+    settings = {
+      ports.dns = 53;
+      upstream.groups.default = [
+        "https://one.one.one.one/dns-query"
+      ];
+      bootstrapDns = {
+        upstream = "https://one.one.one.one/dns-query";
+        ips = [ "1.1.1.1" "1.0.0.1" ];
+      };
+      blocking = {
+        blacklists = {
+          ads = ["https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"];
+          #add more filters if needed
+        };
+        clientGroupsBlock = {
+          default = [ "ads" ];
+        };
+      };
+      caching = {
+        minTime = "5m";
+        maxTime = "30m";
+        prefetching = true;
+      };
+    };
+  };
+  */
+
+  #Virtualisation
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "rommelvj" ];
+
+  nix.settings.download-buffer-size = 524288000;
+
+  services.distccd.enable = true;
+  services.distccd.allowedClients = [ "192.168.1.115/24" "192.168.1.133/24" ];
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
@@ -217,6 +267,7 @@
     allowedTCPPorts = [ 80 443 ];
     allowedTCPPortRanges = [
       { from = 1714; to = 1764; } #KDE Connect
+      { from = 45000; to = 60000; } #discord vc ports
     ];
     allowedUDPPortRanges = [
       { from = 1714; to = 1764; } #KDE Connect
