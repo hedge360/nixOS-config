@@ -126,6 +126,7 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -163,7 +164,7 @@
     noto-fonts-cjk-sans
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #pkgs.neovim
+    #neovim
     wget
     discord
     tlp
@@ -183,7 +184,7 @@
     protonvpn-gui
     pciutils
     usbutils
-    #dmidecode
+    dmidecode
     libgcc
     alsa-utils
     blocky
@@ -194,6 +195,8 @@
     jdk21_headless
     mpv
     ffmpeg
+    krita
+    libreoffice
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -217,41 +220,11 @@
   nix.settings.auto-optimise-store = true;
   #Flakes enabled
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  #DNS blocker     (Doesn't fucking work half the time for some goddamn reason)
-  /*
-  services.blocky = {
-    enable = true;
-    settings = {
-      ports.dns = 53;
-      upstream.groups.default = [
-        "https://one.one.one.one/dns-query"
-      ];
-      bootstrapDns = {
-        upstream = "https://one.one.one.one/dns-query";
-        ips = [ "1.1.1.1" "1.0.0.1" ];
-      };
-      blocking = {
-        blacklists = {
-          ads = ["https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"];
-          #add more filters if needed
-        };
-        clientGroupsBlock = {
-          default = [ "ads" ];
-        };
-      };
-      caching = {
-        minTime = "5m";
-        maxTime = "30m";
-        prefetching = true;
-      };
-    };
-  };
-  */
 
   #Virtualisation
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  users.extraGroups.vboxusers.members = [ "rommelvj" ];
+  virtualisation.virtualbox.host.enable = false;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  #users.extraGroups.vboxusers.members = [ "rommelvj" ];
 
   nix.settings.download-buffer-size = 524288000;
 
