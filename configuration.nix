@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
@@ -136,7 +132,7 @@
   services.tlp = {
     enable = true;
     settings = {
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use, performance is self explanatory
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
       PLATFORM_PROFILE_ON_BAT = "low-power";
@@ -149,7 +145,7 @@
 
       USB_AUTOSUSPEND = 0;
 
-      START_CHARGE_THRESH_BAT0 = 60;
+      START_CHARGE_THRESH_BAT0 = 60; #I dont think this works
       STOP_CHARGE_THRESH_BAT0 = 90;
     };
   };
@@ -197,6 +193,7 @@
     ffmpeg
     krita
     libreoffice
+    ferium
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -228,8 +225,8 @@
 
   nix.settings.download-buffer-size = 524288000;
 
-  services.distccd.enable = true;
-  services.distccd.allowedClients = [ "192.168.1.115/24" "192.168.1.133/24" ];
+  #services.distccd.enable = true;
+  #services.distccd.allowedClients = [ "192.168.1.115/24" "192.168.1.133/24" ];
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
