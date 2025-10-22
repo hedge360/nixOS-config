@@ -171,7 +171,7 @@
     lm_sensors
     ytdownloader
     kdePackages.kdenlive
-    #gimp3
+    gimp3
     spotify
     bibata-cursors
     kdePackages.partitionmanager
@@ -194,6 +194,7 @@
     krita
     libreoffice
     ferium
+    prismlauncher
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -3,6 +3,7 @@ let
   # We point directly to 'gnugrep' instead of 'grep'
   grep = pkgs.gnugrep;
   # 1. Declare the Flatpaks you *want* on your system
+  #VQ8UJ34V8FS8
   desiredFlatpaks = [
     "org.vinegarhq.Sober"
     "pw.mmk.OpenFreebuds"
