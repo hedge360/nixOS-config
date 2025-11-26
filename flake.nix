@@ -1,6 +1,8 @@
 {
   inputs = {
+    #nixpkgs.url = "github:nixos/nixpkgs/cb82756ecc37fa623f8cf3e88854f9bf7f64af93";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    #change to nixos-unstable once fcitx5 build issue has been fixed
     #home-manager = {
     #  url = "github:nix-community/home-manager";
     #  inputs.nixpkgs.follows = "nixpkgs";

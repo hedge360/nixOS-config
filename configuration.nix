@@ -49,7 +49,7 @@
         fcitx5-rime
         rime-data
         fcitx5-gtk
-        fcitx5-chinese-addons
+        qt6Packages.fcitx5-chinese-addons
         librime
       ];
     };
@@ -73,7 +73,7 @@
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
@@ -86,7 +86,15 @@
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      cups-filters
+      cups-browsed
+      hplip
+      hplipWithPlugin
+    ];
+  };
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -122,6 +130,14 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  services.smartd = {
+    enable = true;
+    devices = [
+      {
+        device = "/dev/disk/by-id/ata-WD_Blue_SA510_M.2_2280_500GB_241334801358";
+      }
+    ];
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -129,14 +145,16 @@
   #TLP Configuration
   services.power-profiles-daemon.enable = false;
 
+  services.thermald.enable = true;
+
   services.tlp = {
     enable = true;
     settings = {
       CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use, performance is self explanatory
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
-      PLATFORM_PROFILE_ON_BAT = "low-power";
-      PLATFORM_PROFILE_ON_AC = "balanced";
+      #PLATFORM_PROFILE_ON_BAT = "low-power";
+      #PLATFORM_PROFILE_ON_AC = "balanced";
 
       CPU_BOOST_ON_BAT = 0;
       CPU_BOOST_ON_AC = 1;
@@ -171,22 +189,22 @@
     lm_sensors
     ytdownloader
     kdePackages.kdenlive
+    hplip
     gimp3
     spotify
     bibata-cursors
     kdePackages.partitionmanager
     usbimager
     ollama
-    protonvpn-gui
+    #protonvpn-gui
     pciutils
     usbutils
     dmidecode
     libgcc
     alsa-utils
-    blocky
+    #blocky
     home-manager
     distcc
-    hplip
     lunar-client
     jdk21_headless
     mpv
@@ -195,6 +213,11 @@
     libreoffice
     ferium
     prismlauncher
+    yt-dlp
+    audacity
+    waydroid-nftables
+    qemu
+    smartmontools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -220,9 +243,19 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   #Virtualisation
-  virtualisation.virtualbox.host.enable = false;
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #users.extraGroups.vboxusers.members = [ "rommelvj" ];
+  virtualisation.waydroid.enable = true;
+
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = [ "rommelvj" ];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+
+  systemd.tmpfiles.rules = [ "L+ /var/lib/qemu/firmware - - - - ${pkgs.qemu}/share/qemu/firmware" ];
+
+  boot.binfmt.emulatedSystems = [
+    "aarch64-linux"
+    "riscv64-linux"
+  ];
 
   nix.settings.download-buffer-size = 524288000;
 
@@ -231,6 +264,8 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  networking.nftables.enable = true;
 
   # Open ports in the firewall.
   networking.firewall = {
