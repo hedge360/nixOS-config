@@ -7,6 +7,7 @@ let
   desiredFlatpaks = [
     "org.vinegarhq.Sober"
     "pw.mmk.OpenFreebuds"
+    "sh.ppy.osu"
   ];
 in {
   system.userActivationScripts.flatpakManagement = {

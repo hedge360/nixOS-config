@@ -187,7 +187,7 @@
     #osu-lazer
     obs-studio
     lm_sensors
-    ytdownloader
+    #ytdownloader
     kdePackages.kdenlive
     hplip
     gimp3
@@ -206,18 +206,26 @@
     home-manager
     distcc
     lunar-client
-    jdk21_headless
+    #jdk21_headless
+    jdk25_headless
     mpv
     ffmpeg
     krita
     libreoffice
     ferium
     prismlauncher
+    (prismlauncher.override {
+      jdks = [
+        #jdk21_headless
+        jdk25_headless
+      ];
+    })
     yt-dlp
     audacity
     waydroid-nftables
     qemu
     smartmontools
+    wlr-randr
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -231,6 +239,11 @@
   # Enable services
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+
+  hardware.opentabletdriver.enable = true;
+  hardware.uinput.enable = true;
+  boot.kernelModules = [ "uinput" ];
+  boot.blacklistedKernelModules = [ "wacom" ];
   #Auto updates
   system.autoUpgrade.enable = true;
   system.autoUpgrade.dates = "weekly";
