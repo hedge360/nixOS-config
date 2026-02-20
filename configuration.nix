@@ -1,11 +1,23 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
       ./flatpak.nix
+      ./vm.nix
+      ./networking.nix
+      ./power.nix
+      ./librewolf.nix
+      inputs.home-manager.nixosModules.home-manager
     ];
+
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; };
+    users = {
+      rommelvj = import ./home.nix;
+    };
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = false;
@@ -22,15 +34,27 @@
     };
   };
 
+  boot.plymouth.enable = false;
+
+  boot.kernelParams = [ "resume_offset=88035328" ];
+  boot.resumeDevice = "/dev/disk/by-uuid/14e25d29-90b4-4601-a017-e976bca6af47";
+
+  powerManagement.enable = true;
+
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 32*1024; #32 GB Swap
+  }];
+
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 100;
+  };
+
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -51,6 +75,7 @@
         fcitx5-gtk
         qt6Packages.fcitx5-chinese-addons
         librime
+        kdePackages.fcitx5-qt
       ];
     };
   };
@@ -78,6 +103,11 @@
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -123,12 +153,8 @@
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
-      kdePackages.korganizer
     ];
   };
-
-  # Install firefox.
-  programs.firefox.enable = true;
 
   services.smartd = {
     enable = true;
@@ -142,32 +168,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  #TLP Configuration
-  services.power-profiles-daemon.enable = false;
-
-  services.thermald.enable = true;
-
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use, performance is self explanatory
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-
-      #PLATFORM_PROFILE_ON_BAT = "low-power";
-      #PLATFORM_PROFILE_ON_AC = "balanced";
-
-      CPU_BOOST_ON_BAT = 0;
-      CPU_BOOST_ON_AC = 1;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_AC = 1;
-
-      USB_AUTOSUSPEND = 0;
-
-      START_CHARGE_THRESH_BAT0 = 60; #I dont think this works
-      STOP_CHARGE_THRESH_BAT0 = 90;
-    };
-  };
-
   #App services
   services.flatpak.enable = true;
 
@@ -175,7 +175,10 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
+    kdePackages.korganizer
+    tesseract
     noto-fonts-cjk-sans
+    #swtpm
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #neovim
@@ -184,13 +187,14 @@
     tlp
     kdePackages.kdeconnect-kde
     flatpak
-    #osu-lazer
     obs-studio
     lm_sensors
-    #ytdownloader
     kdePackages.kdenlive
+    (kdePackages.kdenlive.override {
+      ffmpeg-full = pkgs.ffmpeg_7-full;
+    })
     hplip
-    gimp3
+    #gimp3
     spotify
     bibata-cursors
     kdePackages.partitionmanager
@@ -202,30 +206,35 @@
     dmidecode
     libgcc
     alsa-utils
-    #blocky
     home-manager
     distcc
-    lunar-client
-    #jdk21_headless
     jdk25_headless
     mpv
-    ffmpeg
+    ffmpeg-full
     krita
     libreoffice
     ferium
     prismlauncher
     (prismlauncher.override {
       jdks = [
-        #jdk21_headless
         jdk25_headless
       ];
     })
     yt-dlp
-    audacity
     waydroid-nftables
     qemu
     smartmontools
-    wlr-randr
+    #wlr-randr
+    #gnuplot
+    #kdePackages.kalgebra
+    nix-search-cli
+    rpi-imager
+    kdePackages.kteatime
+    pinentry-qt
+    foot
+    kitty
+    waybar
+    hyprpaper
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -237,6 +246,14 @@
   # };
 
   # Enable services
+  security.apparmor.enable = true;
+
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-qt;
+  };
+
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
@@ -248,54 +265,31 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.dates = "weekly";
   #Auto garbage collection
-  nix.gc.automatic = true;
-  nix.gc.dates = "daily";
-  nix.gc.options = "delete-older-than 7d";
-  nix.settings.auto-optimise-store = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than-7d";
+  };
   #Flakes enabled
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nix.buildMachines = [{
+    #Documentation: https://wiki.nixos.org/wiki/Distributed_build
+    hostName = "builder";
+    system = "aarch64-linux";
+    protocol = "ssh-ng";
+    maxJobs = 4;
+    speedFactor = 2;
+    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+    mandatoryFeatures = [ ];
+  }];
+  nix.distributedBuilds = true;
+  nix.settings.builders-use-substitutes = true;
 
   #Virtualisation
   virtualisation.waydroid.enable = true;
 
-  programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = [ "rommelvj" ];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
-
-  systemd.tmpfiles.rules = [ "L+ /var/lib/qemu/firmware - - - - ${pkgs.qemu}/share/qemu/firmware" ];
-
-  boot.binfmt.emulatedSystems = [
-    "aarch64-linux"
-    "riscv64-linux"
-  ];
-
   nix.settings.download-buffer-size = 524288000;
-
-  #services.distccd.enable = true;
-  #services.distccd.allowedClients = [ "192.168.1.115/24" "192.168.1.133/24" ];
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  networking.nftables.enable = true;
-
-  # Open ports in the firewall.
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 80 443 ];
-    allowedTCPPortRanges = [
-      { from = 1714; to = 1764; } #KDE Connect
-      { from = 45000; to = 60000; } #discord vc ports
-    ];
-    allowedUDPPortRanges = [
-      { from = 1714; to = 1764; } #KDE Connect
-      { from = 45000; to = 60000; } #discord vc ports
-    ];
-    checkReversePath = false;
-  };
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
