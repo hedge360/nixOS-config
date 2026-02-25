@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
   home.username = "rommelvj";
   home.homeDirectory = "/home/rommelvj";
 
@@ -86,6 +84,9 @@
         email = "scion5u@gmail.com";
       };
       init.defaultBranch = "main";
+      gpg.format = "ssh";
+      push = { autoSetupRemote = true; };
+      credential.helper = "libsecret";
     };
     aliases = {
       c = "commit";
@@ -95,5 +96,14 @@
       cl = "clone";
       pl = "pull";
     };
+    signing = {
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINMK/FzqpeeCt72mQxRcTlP5HLJshjybbQ0UIZKx8jM/ scion5u@gmail.com";
+      signByDefault = true;
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
   };
 }
