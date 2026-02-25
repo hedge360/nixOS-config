@@ -75,4 +75,25 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  #git
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+    settings = {
+      user = {
+        name = "hedge360";
+        email = "scion5u@gmail.com";
+      };
+      init.defaultBranch = "main";
+    };
+    aliases = {
+      c = "commit";
+      s = "status";
+      a = "add";
+      p = "push";
+      cl = "clone";
+      pl = "pull";
+    };
+  };
 }

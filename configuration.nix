@@ -176,7 +176,7 @@
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
     kdePackages.korganizer
-    tesseract
+    #tesseract
     noto-fonts-cjk-sans
     #swtpm
     git
@@ -190,9 +190,9 @@
     obs-studio
     lm_sensors
     kdePackages.kdenlive
-    (kdePackages.kdenlive.override {
-      ffmpeg-full = pkgs.ffmpeg_7-full;
-    })
+    #(kdePackages.kdenlive.override {
+    #  ffmpeg-full = pkgs.ffmpeg_7-full;
+    #})
     hplip
     #gimp3
     spotify
@@ -207,11 +207,11 @@
     libgcc
     alsa-utils
     home-manager
-    distcc
+    #distcc
     jdk25_headless
     mpv
     ffmpeg-full
-    krita
+    #krita
     libreoffice
     ferium
     prismlauncher
@@ -224,7 +224,6 @@
     waydroid-nftables
     qemu
     smartmontools
-    #wlr-randr
     #gnuplot
     #kdePackages.kalgebra
     nix-search-cli
