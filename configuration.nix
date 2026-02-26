@@ -234,6 +234,7 @@
     kitty
     waybar
     hyprpaper
+    kdePackages.qrca
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -260,15 +261,25 @@
   hardware.uinput.enable = true;
   boot.kernelModules = [ "uinput" ];
   boot.blacklistedKernelModules = [ "wacom" ];
+
   #Auto updates
   system.autoUpgrade.enable = true;
   system.autoUpgrade.dates = "weekly";
+
   #Auto garbage collection
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than-7d";
+    persistent = true;
   };
+
+  nix.optimise = {
+    automatic = true;
+    dates = [ "daily" ];
+    persistent = true;
+  };
+
   #Flakes enabled
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
