@@ -74,6 +74,32 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  #waydroid user session and resource management
+  systemd.user.services.waydroid-session = {
+    Unit = {
+      Description = "Waydroid User Session";
+      After = [ "waydroid-container.service" ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.waydroid-nftables}/bin/waydroid session start";
+      ExecEnd = "${pkgs.waydroid-nftables}/bin/waydroid session stop";
+
+      #Clean processes on exit
+      KillMode = "mixed";
+
+      #Resource Limits
+      MemoryMax = "12G";
+      MemoryHigh = "8G";
+
+      TimeoutStopSpec = "15s";
+      Restart = "on-failure";
+    };
+  };
+
   #git
   programs.git = {
     enable = true;
