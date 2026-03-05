@@ -21,4 +21,12 @@
         "aarch64-linux"
         "riscv64-linux"
     ];
+
+    virtualisation.docker = {
+        enable = true;
+        rootless = {
+            enable = true;
+            setSocketVariable = true;
+        };
+    };
 }

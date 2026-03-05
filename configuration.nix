@@ -9,6 +9,7 @@
       ./networking.nix
       ./power.nix
       ./librewolf.nix
+      ./waydroid.nix
       inputs.home-manager.nixosModules.home-manager
     ];
 
@@ -149,7 +150,7 @@
   users.users.rommelvj = {
     isNormalUser = true;
     description = "Rommel Villamor Jr.";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel"  ];
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
@@ -212,7 +213,7 @@
     mpv
     ffmpeg-full
     #krita
-    libreoffice
+    #libreoffice-qt
     ferium
     prismlauncher
     (prismlauncher.override {
@@ -235,6 +236,7 @@
     waybar
     hyprpaper
     kdePackages.qrca
+    audacity
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -297,7 +299,6 @@
   nix.settings.builders-use-substitutes = true;
 
   #Virtualisation
-  virtualisation.waydroid.enable = true;
 
   nix.settings.download-buffer-size = 524288000;
 
