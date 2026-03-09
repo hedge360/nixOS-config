@@ -191,9 +191,6 @@
     obs-studio
     lm_sensors
     kdePackages.kdenlive
-    #(kdePackages.kdenlive.override {
-    #  ffmpeg-full = pkgs.ffmpeg_7-full;
-    #})
     hplip
     #gimp3
     spotify
@@ -237,7 +234,11 @@
     hyprpaper
     kdePackages.qrca
     audacity
+    arion
+    android-studio
   ];
+
+  nixpkgs.config.android_sdk.accept_license = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

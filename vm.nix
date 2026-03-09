@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+    #modules = [ arion.nixosModules.arion ];
+
     programs.virt-manager.enable = true;
     users.groups.libvirtd.members = [ "rommelvj" ];
 
@@ -22,6 +24,7 @@
         "riscv64-linux"
     ];
 
+    #docker
     virtualisation.docker = {
         enable = true;
         rootless = {
@@ -29,4 +32,18 @@
             setSocketVariable = true;
         };
     };
+
+    /*
+    virtualisation.arion = {
+        enable = true;
+        backend = "docker";
+        projects = {
+            "db".settings.services."db".service = {
+                image = "";
+                restart = "unless-stopped";
+                environment = { POSTGRESS_PASSWORD = "password"; };
+            };
+        };
+    };
+    */
 }

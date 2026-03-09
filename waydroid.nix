@@ -16,7 +16,7 @@ in
         "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    systemd.services.waydroiod-container = {
+    systemd.services.waydroid-container = {
         serviceConfig = {
             Delegate = true;
             CPUAccounting = true;
