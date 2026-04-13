@@ -9,7 +9,7 @@
       ./networking.nix
       ./power.nix
       ./librewolf.nix
-      ./waydroid.nix
+      #./waydroid.nix
       inputs.home-manager.nixosModules.home-manager
     ];
 
@@ -210,7 +210,7 @@
     mpv
     ffmpeg-full
     #krita
-    #libreoffice-qt
+    libreoffice-qt
     ferium
     prismlauncher
     (prismlauncher.override {
@@ -235,7 +235,9 @@
     kdePackages.qrca
     audacity
     arion
-    android-studio
+    #android-studio
+    bluez-experimental
+    firmware-updater
   ];
 
   nixpkgs.config.android_sdk.accept_license = true;
@@ -259,6 +261,7 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   hardware.opentabletdriver.enable = true;
   hardware.uinput.enable = true;
