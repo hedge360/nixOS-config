@@ -182,7 +182,7 @@
     #swtpm
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #neovim
+    neovim
     wget
     discord
     tlp
@@ -209,7 +209,7 @@
     jdk25_headless
     mpv
     ffmpeg-full
-    #krita
+    krita
     libreoffice-qt
     ferium
     prismlauncher
@@ -251,7 +251,7 @@
   # };
 
   # Enable services
-  security.apparmor.enable = true;
+  security.apparmor.enable = false;
 
   services.pcscd.enable = true;
   programs.gnupg.agent = {

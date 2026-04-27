@@ -8,6 +8,7 @@ let
     "org.vinegarhq.Sober"
     "pw.mmk.OpenFreebuds"
     "sh.ppy.osu"
+    "org.linux_hardware.hw-probe"
   ];
 in {
   system.userActivationScripts.flatpakManagement = {
