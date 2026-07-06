@@ -1,6 +1,11 @@
 { config, pkgs, ...}:
 
 {
+    nixpkgs.config.permittedInsecurePackages = [
+	"librewolf-151.0.2-1"
+	"librewolf-unwrapped-151.0.2-1"
+    ];
+
     programs.firefox = {
         enable = true;
         package = pkgs.librewolf;
@@ -46,5 +51,28 @@
         };
     };
 
+    programs.firejail = {
+	enable = true;
+	wrappedBinaries = {
+	    librewolf = {
+	    	executable = "${pkgs.librewolf}/bin/librewolf";
+		profile = "${pkgs.firejail}/etc/firejail/librewolf.profile";
+		extraArgs = [
+		    #Uncomment if using U2F USB STICK
+		    #"--ignore=private-dev"
+		    "--dbus-user.talk=org.freedesktop.Notifications"
+		];
+	    };
+	};
+    };
+
     environment.etc."firefox/policies/policies.json".target = "librewolf/policies/policies.json";
+    environment.etc."firejail/librewolf.local".text = ''
+	private-etc fonts,fonts/conf.d,fonts/conf.avail
+
+	read-only /run/current-system/sw/share/fonts
+	read-only /nix/store
+
+	whitelist /run/current-system/sw/share/fonts/opentype/noto-cjk
+    '';
 }

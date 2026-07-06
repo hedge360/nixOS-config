@@ -1,8 +1,14 @@
 { config, pkgs, ... }:
 
 {
+    networking.networkmanager.enable = true;
     networking.nftables.enable = true;
-
+    
+    boot.kernelParams = [
+    	"btintel.enable_hci_reset=0"
+	"btintel.disable_autosuspend=1"
+    ];
+    
     services.dnsproxy = {
         enable = true;
         settings = {

@@ -9,7 +9,7 @@
       ./networking.nix
       ./power.nix
       ./librewolf.nix
-      #./waydroid.nix
+      ./waydroid.nix
       inputs.home-manager.nixosModules.home-manager
     ];
 
@@ -42,6 +42,8 @@
 
   powerManagement.enable = true;
 
+  hardware.acpilight.enable = true;
+
   swapDevices = [{
     device = "/var/lib/swapfile";
     size = 32*1024; #32 GB Swap
@@ -56,9 +58,6 @@
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -80,6 +79,12 @@
       ];
     };
   };
+  
+  fonts.enableDefaultPackages = true;
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans
+  ];
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
@@ -172,19 +177,25 @@
   #App services
   services.flatpak.enable = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    #dedicatedServer.openFirewall = true;
+    #localNetworkGameTransfers.openFirewall = true;
+  };
+
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
     kdePackages.korganizer
-    #tesseract
     noto-fonts-cjk-sans
+    #tesseract
     #swtpm
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     neovim
     wget
     discord
+    element-desktop
     tlp
     kdePackages.kdeconnect-kde
     flatpak
@@ -192,7 +203,7 @@
     lm_sensors
     kdePackages.kdenlive
     hplip
-    #gimp3
+    gimp
     spotify
     bibata-cursors
     kdePackages.partitionmanager
@@ -225,7 +236,7 @@
     #gnuplot
     #kdePackages.kalgebra
     nix-search-cli
-    rpi-imager
+    #rpi-imager
     kdePackages.kteatime
     pinentry-qt
     foot
@@ -235,12 +246,19 @@
     kdePackages.qrca
     audacity
     arion
-    #android-studio
     bluez-experimental
     firmware-updater
+    hydra-check
+    fastfetch
+    waypaper
+    kdePackages.bluedevil
+    vulnix
+    #zoom-us
+    wlr-randr
+    hyprshot
+    chromium
+    ddcutil
   ];
-
-  nixpkgs.config.android_sdk.accept_license = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -251,8 +269,6 @@
   # };
 
   # Enable services
-  security.apparmor.enable = false;
-
   services.pcscd.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -301,8 +317,6 @@
   }];
   nix.distributedBuilds = true;
   nix.settings.builders-use-substitutes = true;
-
-  #Virtualisation
 
   nix.settings.download-buffer-size = 524288000;
 

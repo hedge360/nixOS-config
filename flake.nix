@@ -6,14 +6,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #Packages built from source
     kwin-effects-better-blur-dx = {
       url = "github:xarblu/kwin-effects-better-blur-dx";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = {self, nixpkgs, home-manager, kwin-effects-better-blur-dx, ... } @inputs:
+  outputs = {self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, ... } @inputs:
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs {
@@ -40,7 +44,11 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+	    backupFileExtension = "backup";
             users.rommelvj = import ./home.nix;
+	    sharedModules = [
+	        inputs.caelestia-shell.homeManagerModules.default
+	    ];
           };
         }
       ];

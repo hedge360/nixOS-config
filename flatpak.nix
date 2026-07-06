@@ -9,6 +9,7 @@ let
     "pw.mmk.OpenFreebuds"
     "sh.ppy.osu"
     "org.linux_hardware.hw-probe"
+    "us.zoom.Zoom"
   ];
 in {
   system.userActivationScripts.flatpakManagement = {
