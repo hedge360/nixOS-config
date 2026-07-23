@@ -107,7 +107,10 @@
   services.xserver.enable = false;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
   services.desktopManager.plasma6.enable = true;
 
   programs.hyprland = {
@@ -155,7 +158,7 @@
   users.users.rommelvj = {
     isNormalUser = true;
     description = "Rommel Villamor Jr.";
-    extraGroups = [ "networkmanager" "wheel"  ];
+    extraGroups = [ "networkmanager" "wheel" "wireshark" ];
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
@@ -176,6 +179,7 @@
 
   #App services
   services.flatpak.enable = true;
+  security.apparmor.enable = true;
 
   programs.steam = {
     enable = true;
@@ -190,6 +194,7 @@
     noto-fonts-cjk-sans
     #tesseract
     #swtpm
+    hyprshutdown
     git
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     neovim
@@ -258,6 +263,8 @@
     hyprshot
     chromium
     ddcutil
+    brightnessctl
+    openfreebuds
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -67,6 +67,17 @@
     settings = {
 	#settings to enable
 	wallpaper = "~/Downloads/Wallpapers/20260207_102921.jpg";
+	osd = {
+	    enabled = true;
+	    enableBrightness = false;
+	};
+	volume = {
+	    max = 150;
+	    default = 100;
+	};
+	services = {
+	    maxVolume = 1.5;
+	};
     };
     extraConfig = '''';
   };

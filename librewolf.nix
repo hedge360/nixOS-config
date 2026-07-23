@@ -23,6 +23,7 @@
                 "privacy.trackingprotection.fingerprinting.enabled" = true;
                 "privacy.trackingprotection.socialtracking.enabled" = true;
                 "privacy.resistFingerprinting.letterboxing" = true;
+		"media.peerconnection.enabled" = false;
             };
             ExtensionSettings = {
                 #Bitwarden
@@ -75,4 +76,17 @@
 
 	whitelist /run/current-system/sw/share/fonts/opentype/noto-cjk
     '';
+
+    home-manager.users.rommelvj = {
+	xdg.mimeApps = {
+	    enable = true;
+	    defaultApplications = {
+		"text/html" = "librewolf.desktop";
+		"x-scheme-handler/http" = "librewolf.desktop";
+		"x-scheme-handler/https" = "librewolf.desktop";
+		"x-scheme-handler/about" = "librewolf.desktop";
+		"x-scheme-handler/unknown" = "librewolf.desktop";
+	    };
+	};
+    };
 }

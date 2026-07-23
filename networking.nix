@@ -77,4 +77,16 @@
         ];
         checkReversePath = false;
     };
+
+    #Bypass internet censorship in China
+    #For more information, visit https://github.com/v2rayA/v2rayA
+    #services.v2raya.enable = true;
+
+    programs.wireshark.enable = true;
+
+    environment.systemPackages = with pkgs; [
+	#v2raya
+	#xray
+	wireshark
+    ];
 }

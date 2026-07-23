@@ -6,9 +6,7 @@ let
   #VQ8UJ34V8FS8
   desiredFlatpaks = [
     "org.vinegarhq.Sober"
-    "pw.mmk.OpenFreebuds"
     "sh.ppy.osu"
-    "org.linux_hardware.hw-probe"
     "us.zoom.Zoom"
   ];
 in {
