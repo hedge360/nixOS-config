@@ -11,6 +11,7 @@
       ./librewolf.nix
       ./waydroid.nix
       inputs.home-manager.nixosModules.home-manager
+      inputs.flatpaks.nixosModules.default
     ];
 
   home-manager = {

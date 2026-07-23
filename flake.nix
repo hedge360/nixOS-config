@@ -15,9 +15,11 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
   };
 
-  outputs = {self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, ... } @inputs:
+  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, ... } @inputs:
   let
     system = "x86_64-linux";
     pkgs = import nixpkgs {
