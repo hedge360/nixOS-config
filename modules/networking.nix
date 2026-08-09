@@ -30,6 +30,17 @@
 
     services.cloudflare-warp.enable = true;
 
+    services.tailscale = {
+        enable = true;
+    };
+
+    systemd.services.tailscaled.serviceConfig.Environment = [
+	"TS_DEBUG_FIREWALL_MODE=nftables"
+    ];
+
+    systemd.network.wait-online.enable = false;
+    boot.initrd.systemd.network.wait-online.enable = false;
+
     systemd.services.dnsproxy.serviceConfig = {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
@@ -65,12 +76,24 @@
     # Open ports in the firewall.
     networking.firewall = {
         enable = true;
+	trustedInterfaces = [
+	    config.services.tailscale.interfaceName
+	];
         allowedTCPPorts = [ 80 443 ];
         allowedTCPPortRanges = [
         { from = 1714; to = 1764; } #KDE Connect
         #{ from = 45000; to = 60000; } #discord vc ports
         ];
-        allowedUDPPorts = [ 500 1701 2408 4500 4443 8443 8095 ]; #MASQUE and wireguard fallbacks
+        allowedUDPPorts = [ 
+	    500
+	    1701
+	    2408
+	    4500
+	    4443
+	    8443
+	    8095 #MASQUE and wireguard fallbacks (Cloudflare WARP)
+	    config.services.tailscale.port
+	];
         allowedUDPPortRanges = [
         { from = 1714; to = 1764; } #KDE Connect
         #{ from = 45000; to = 60000; } #discord vc ports

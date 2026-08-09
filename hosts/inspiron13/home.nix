@@ -454,6 +454,8 @@
         set number
 	syntax on
     '';
+    viAlias = true;
+    vimAlias = true;
     plugins = with pkgs.vimPlugins; [
 	nvim-treesitter
 	{

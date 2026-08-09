@@ -4,12 +4,12 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./flatpak.nix
-      ./vm.nix
-      ./networking.nix
-      ./power.nix
-      ./librewolf.nix
-      ./waydroid.nix
+      ./../../modules/flatpak.nix
+      ./../../modules/vm.nix
+      ./../../modules/networking.nix
+      ./../../modules/power.nix
+      ./../../modules/librewolf.nix
+      ./../../modules/waydroid.nix
       inputs.home-manager.nixosModules.home-manager
       inputs.flatpaks.nixosModules.default
     ];
@@ -152,6 +152,26 @@
     #media-session.enable = true;
   };
 
+/*
+  services.mpd = {
+    enable = true;
+    user = "rommelvj";
+    settings = {
+      audio_output = [
+	{
+	  type = "pipewire";
+	  name = "My PipeWire Output";
+	}
+      ];
+    };
+  };
+
+  systemd.services.mpd.environment = {
+    # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/609
+    XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.rommelvj.1000}";
+  };
+*/
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -184,7 +204,7 @@
 
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true;
+    #remotePlay.openFirewall = true;
     #dedicatedServer.openFirewall = true;
     #localNetworkGameTransfers.openFirewall = true;
   };
@@ -197,7 +217,7 @@
     #swtpm
     hyprshutdown
     git
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     neovim
     wget
     discord
@@ -214,8 +234,8 @@
     bibata-cursors
     kdePackages.partitionmanager
     usbimager
-    ollama
-    #protonvpn-gui
+    #ollama
+    #proton-vpn
     pciutils
     usbutils
     dmidecode
@@ -256,16 +276,16 @@
     firmware-updater
     hydra-check
     fastfetch
-    waypaper
+    #waypaper
     kdePackages.bluedevil
-    vulnix
-    #zoom-us
+    #vulnix
+    #winboat
     wlr-randr
     hyprshot
     chromium
     ddcutil
     brightnessctl
-    openfreebuds
+    #kdePackages.plasma-browser-integration
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -282,6 +302,8 @@
     enable = true;
     pinentryPackage = pkgs.pinentry-qt;
   };
+
+  #services.openssh.enable = true;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -315,7 +337,7 @@
 
   nix.buildMachines = [{
     #Documentation: https://wiki.nixos.org/wiki/Distributed_build
-    hostName = "builder";
+    hostName = "nixremote";
     system = "aarch64-linux";
     protocol = "ssh-ng";
     maxJobs = 4;

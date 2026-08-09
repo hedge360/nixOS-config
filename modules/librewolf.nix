@@ -1,11 +1,6 @@
 { config, pkgs, ...}:
 
 {
-    nixpkgs.config.permittedInsecurePackages = [
-	"librewolf-151.0.2-1"
-	"librewolf-unwrapped-151.0.2-1"
-    ];
-
     programs.firefox = {
         enable = true;
         package = pkgs.librewolf;
@@ -64,6 +59,14 @@
 		    "--dbus-user.talk=org.freedesktop.Notifications"
 		];
 	    };
+
+	    steam = { #May not work
+	        executable = "${pkgs.steam}/bin/steam";
+	        profile = "${pkgs.firejail}/etc/firejail/steam.profile";
+	        extraArgs = [
+		    "--private=$HOME/steam-sandbox"
+	        ];
+	    };
 	};
     };
 
@@ -75,6 +78,8 @@
 	read-only /nix/store
 
 	whitelist /run/current-system/sw/share/fonts/opentype/noto-cjk
+
+	ignore nodbus
     '';
 
     home-manager.users.rommelvj = {
