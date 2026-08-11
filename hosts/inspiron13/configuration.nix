@@ -36,15 +36,28 @@
     };
   };
 
+  fileSystems = {
+    "/".options = [
+      "compress=zstd"
+    ];
+    "/home".options = [
+      "compress=zstd"
+    ];
+    "/nix".options = [
+      "compress=zstd"
+      "noatime"
+    ];
+  };
+
   boot.plymouth.enable = false;
 
-  boot.kernelParams = [ "resume_offset=88035328" ];
-  boot.resumeDevice = "/dev/disk/by-uuid/14e25d29-90b4-4601-a017-e976bca6af47";
+  #boot.kernelParams = [ "resume_offset=88035328" ];
+  #boot.resumeDevice = "/dev/disk/by-uuid/7201b45d-9d8c-4351-b611-875f0ad73cef";
 
   powerManagement.enable = true;
 
   hardware.acpilight.enable = true;
-
+/*
   swapDevices = [{
     device = "/var/lib/swapfile";
     size = 32*1024; #32 GB Swap
@@ -53,11 +66,11 @@
   boot.kernel.sysctl = {
     "vm.swappiness" = 100;
   };
-
+*/
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "inspiron13-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Set your time zone.

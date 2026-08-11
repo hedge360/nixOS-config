@@ -37,7 +37,7 @@
   in
   {
     nixosConfigurations = {
-      inspiron-13-nixos = nixpkgs.lib.nixosSystem {
+      inspiron13-nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
 
         modules = [
