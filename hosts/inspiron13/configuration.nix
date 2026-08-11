@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./../../modules/btrfs.nix
       ./../../modules/flatpak.nix
       ./../../modules/vm.nix
       ./../../modules/networking.nix
@@ -51,13 +52,13 @@
 
   boot.plymouth.enable = false;
 
-  #boot.kernelParams = [ "resume_offset=88035328" ];
-  #boot.resumeDevice = "/dev/disk/by-uuid/7201b45d-9d8c-4351-b611-875f0ad73cef";
+  boot.kernelParams = [ "resume_offset=8388607" ];
+  boot.resumeDevice = "/dev/disk/by-uuid/7201b45d-9d8c-4531-b611-875f0ad73cef";
 
   powerManagement.enable = true;
 
   hardware.acpilight.enable = true;
-/*
+
   swapDevices = [{
     device = "/var/lib/swapfile";
     size = 32*1024; #32 GB Swap
@@ -66,7 +67,7 @@
   boot.kernel.sysctl = {
     "vm.swappiness" = 100;
   };
-*/
+
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
