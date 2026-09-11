@@ -8,6 +8,38 @@
     	"btintel.enable_hci_reset=0"
 	"btintel.disable_autosuspend=1"
     ];
+
+    networking.networkmanager.ensureProfiles.profiles = {
+	eduroam = {
+	    connection = {
+		id = "eduroam";
+		type = "wifi";
+		interface-name = "wlp1s0";
+	    };
+	    wifi = {
+		mode = "infrastructure";
+		ssid = "eduroam";
+	    };
+	    wifi-security = {
+		key-mgmt = "wpa-eap";
+		pmf = "1";
+	    };
+	    "802-1x" = {
+		eap = "tls";
+		identity = "rtvillamor@cpp.edu";
+		client-cert = "/etc/ssl/certs/eduroam/cert.pem";
+		private-key = "/etc/wpa_supplicant/private.key";
+		private-key-password = "K2lJadr6YzgKeEwjdKqrGsH4SHCHQf";
+		ca-cert = "/etc/ssl/certs/eduroam/usertrustrsaca [jdk].pem";
+	    };
+	    ipv4 = {
+		method = "auto";
+	    };
+	    ipv6 = {
+		method = "auto";
+	    };
+	};
+    };
     
     services.dnsproxy = {
         enable = true;

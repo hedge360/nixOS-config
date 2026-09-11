@@ -59,14 +59,6 @@
 		    "--dbus-user.talk=org.freedesktop.Notifications"
 		];
 	    };
-
-	    steam = { #May not work
-	        executable = "${pkgs.steam}/bin/steam";
-	        profile = "${pkgs.firejail}/etc/firejail/steam.profile";
-	        extraArgs = [
-		    "--private=$HOME/steam-sandbox"
-	        ];
-	    };
 	};
     };
 

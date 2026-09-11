@@ -22,9 +22,23 @@
     };
 
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    globalprotect-openconnect.url = "github:yuezk/GlobalProtect-openconnect";
+
+    disko = { 
+      url = "github:nix-community/disko/latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, ... } @inputs:
+  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, ... } @inputs:
   let
     system = "x86_64-linux";
     arm-system = "aarch64-linux";
@@ -60,12 +74,30 @@
 	      extraSpecialArgs = { inherit inputs; };
             };
           }
+	  sops-nix.nixosModules.sops
+	  globalprotect-openconnect.nixosModules.default
+	  {
+	    programs.globalprotect-openconnect.enable = true;
+	    environment.systemPackages = [
+	      nixpkgs.legacyPackages.${system}.gnomeExtensions.appindicator
+	    ];
+	  }
         ];
       };
 
       #rpi5-nixos = nixpkgs.lib.nixosSystem {
 	#code
       #};
+
+      macbook-nixos = nixpkgs.lib.nixosSystem {
+	specialArgs = { inherit inputs; };
+
+	modules = [
+	  ./hosts/macbook/configuration.nix
+	  inputs.disko.nixosModules.disko
+	  inputs.impermanence.nixosModules.impermanence
+	];
+      };
     };
   };
 }

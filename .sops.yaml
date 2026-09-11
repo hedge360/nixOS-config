@@ -1,0 +1,14 @@
+keys:
+  - &personal_age_key age1qm06hndg2787uqfs00fkstz00nhvtee3lx50kzajhwupyhag29fqj7v3xt
+  - &root_age_key age1nmjy89npprhzts2w6taxrkj2j3k3flzk0sf6eehccek6zesszqssdkrv05
+
+creation_rules:
+  - path_regex: "secrets/.*\\.yaml$"
+    key_groups:
+      - age:
+          - *personal_age_key
+          - *root_age_key
+
+#Documentation:
+#https://saylesss88.github.io/installation/enc/sops-nix.html
+#https://github.com/Mic92/sops-nix

@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   imports =
@@ -24,16 +24,18 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = false;
-  boot.loader.grub.enable = true;
+  boot.loader.grub.enable = false;
+  boot.loader.limine.enable = true;
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
       efiSysMountPoint = "/boot";
     };
-    grub = {
+    limine = {
       efiSupport = true;
-      device = "nodev";
-      useOSProber = true;
+      #style.wallpapers = [
+	#"/boot/limine/wallpapers/wallpapers-birdSilhouette.jpg"
+      #];
     };
   };
 
@@ -52,16 +54,14 @@
 
   boot.plymouth.enable = false;
 
-  boot.kernelParams = [ "resume_offset=8388607" ];
-  boot.resumeDevice = "/dev/disk/by-uuid/7201b45d-9d8c-4531-b611-875f0ad73cef";
+  boot.resumeDevice = "/dev/disk/by-uuid/f9c46821-1297-426b-92d2-b47bc94a6fa5";
 
   powerManagement.enable = true;
 
   hardware.acpilight.enable = true;
 
   swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 32*1024; #32 GB Swap
+    device = "/dev/disk/by-uuid/f9c46821-1297-426b-92d2-b47bc94a6fa5";
   }];
 
   boot.kernel.sysctl = {
@@ -154,7 +154,7 @@
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
-    enable = true;
+    enable = lib.mkForce true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
@@ -164,6 +164,11 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+  hardware.alsa = {
+    enable = true;
+    enablePersistence = true;
+    #enableBluetooth = true;
   };
 
 /*
@@ -218,6 +223,10 @@
 
   programs.steam = {
     enable = true;
+    extraCompatPackages = with pkgs; [
+      dwproton-bin
+      proton-ge-bin
+    ];
     #remotePlay.openFirewall = true;
     #dedicatedServer.openFirewall = true;
     #localNetworkGameTransfers.openFirewall = true;
@@ -243,7 +252,7 @@
     lm_sensors
     kdePackages.kdenlive
     hplip
-    gimp
+    #gimp
     spotify
     bibata-cursors
     kdePackages.partitionmanager
@@ -300,6 +309,10 @@
     ddcutil
     brightnessctl
     #kdePackages.plasma-browser-integration
+    rnote
+    age
+    sops
+    teams-for-linux
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -326,7 +339,7 @@
   hardware.opentabletdriver.enable = true;
   hardware.uinput.enable = true;
   boot.kernelModules = [ "uinput" ];
-  boot.blacklistedKernelModules = [ "wacom" ];
+  #boot.blacklistedKernelModules = [ "wacom" ];
 
   #Auto updates
   system.autoUpgrade.enable = true;
@@ -351,12 +364,12 @@
 
   nix.buildMachines = [{
     #Documentation: https://wiki.nixos.org/wiki/Distributed_build
-    hostName = "nixremote";
+    hostName = "100.107.245.109";
     system = "aarch64-linux";
     protocol = "ssh-ng";
     maxJobs = 4;
     speedFactor = 2;
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" "qemu-x86_64" ];
     mandatoryFeatures = [ ];
   }];
   nix.distributedBuilds = true;

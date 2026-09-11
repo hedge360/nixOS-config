@@ -55,11 +55,5 @@
 			verbosity = "crit";
 			extraOptions = [ "--loadavg-target" "5.0" ];
 		};
-		home = {
-			spec = "/home";
-			hashTableSizeMB = 2048;
-			verbosity = "crit";
-			extraOptions = [ "--loadavg-target" "5.0" ];
-		};
 	};
 }

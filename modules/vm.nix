@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-    #modules = [ arion.nixosModules.arion ];
-
     programs.virt-manager.enable = true;
     users.groups.libvirtd.members = [ "rommelvj" ];
 
@@ -24,26 +22,17 @@
         "riscv64-linux"
     ];
 
-    #docker
-    virtualisation.docker = {
-        enable = true;
-        rootless = {
-            enable = true;
-            setSocketVariable = true;
-        };
+    virtualisation.containers.enable = true;
+    virtualisation.podman = {
+	enable = true;
+	dockerCompat = true;
+	defaultNetwork.settings.dns_enabled = true;
     };
 
-    /*
-    virtualisation.arion = {
-        enable = true;
-        backend = "docker";
-        projects = {
-            "db".settings.services."db".service = {
-                image = "";
-                restart = "unless-stopped";
-                environment = { POSTGRESS_PASSWORD = "password"; };
-            };
-        };
-    };
-    */
+    environment.systemPackages = with pkgs; [
+	dive
+	podman-tui
+	docker-compose
+	podman-compose
+    ];
 }
