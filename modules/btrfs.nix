@@ -47,7 +47,7 @@
 			};
 		};
 	};
-
+/*
 	services.beesd.filesystems = {
 		root = {
 			spec = "/";
@@ -56,4 +56,5 @@
 			extraOptions = [ "--loadavg-target" "5.0" ];
 		};
 	};
+*/
 }

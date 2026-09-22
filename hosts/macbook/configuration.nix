@@ -1,16 +1,12 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { config, lib, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./../../modules/flatpak.nix
       ./../../modules/vm.nix
       ./../../modules/power.nix
+      ./../../modules/impermanence.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -62,7 +58,7 @@
   security.lockKernelModules = true;
 
   nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-63-7.2.4"
+    "broadcom-sta-6.30.223.271-63-7.2.6"
   ];
 
   # Set your time zone.
@@ -100,17 +96,6 @@
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.options = "";
 
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = with pkgs; [
-      cups-filters
-      cups-browsed
-      hplip
-      hplipWithPlugin
-    ];
-  };
-
   # Enable sound.
   # services.pulseaudio.enable = true;
   # OR
@@ -139,36 +124,11 @@
 
   services.flatpak.enable = true;
 
-  services.thermald.enable = true;
-
-  services.power-profiles-daemon.enable = false;
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-
-      PLATFORM_PROFILE_ON_BAT = "balance-performance";
-      PLATFORM_PROFILE_ON_AC = "performance";
-
-      CPU_BOOST_ON_BAT = 0;
-      CPU_BOOST_ON_AC = 1;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_AC = 1;
-
-      USB_AUTOSUSPEND = 0;
-
-      START_CHARGE_THRESH_BAT0 = 60;
-      STOP_CHARGE_THRESH_BAT0 = 90;
-    };
-  };
-
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    hplip
     noto-fonts-cjk-sans
     git
     kdePackages.kdepim-addons
@@ -181,7 +141,6 @@
     alsa-utils
     home-manager
     qemu
-    waydroid-nftables
     fastfetch
     kdePackages.krohnkite
     kdePackages.krdc
@@ -200,11 +159,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  system.autoUpgrade = {
-    enable = true;
-    dates = "weekly";
-  };
-
   nix.gc = {
     automatic = true;
     dates = "weekly";
@@ -214,23 +168,8 @@
   nix.settings.auto-optimise-store = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  virtualisation.waydroid.enable = true;
-
-  programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = [ "rommelvj" ];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
-
-  virtualisation.docker.enable = true;
-
-  systemd.tmpfiles.rules = [ "L+ /var/lib/qemu/firmware - - - - ${pkgs.qemu}/share/qemu/firmware" ];
-
-  boot.binfmt.emulatedSystems = [
-    "aarch64-linux"
-    "riscv64-linux"
-  ];
-
   nix.settings.download-buffer-size = 524280000;
+  nix.settings.access-tokens = ["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" ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -239,6 +178,7 @@
 
   networking.firewall = {
     enable = true;
+    trustedInterfaces = [ "virbr0" ];
     allowedTCPPorts = [ 22 80 443 ];
     allowedTCPPortRanges = [
       { from = 1714; to = 1764; } #KDE Connect

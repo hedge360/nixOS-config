@@ -34,5 +34,6 @@
 	podman-tui
 	docker-compose
 	podman-compose
+	dnsmasq
     ];
 }

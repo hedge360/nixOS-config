@@ -38,7 +38,7 @@
     impermanence.url = "github:nix-community/impermanence";
   };
 
-  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, ... } @inputs:
+  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, disko, impermanence, ... } @inputs:
   let
     system = "x86_64-linux";
     arm-system = "aarch64-linux";
@@ -61,6 +61,7 @@
               kwin-effects-better-blur-dx.packages.${system}.default
             ];
           }
+
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -74,7 +75,11 @@
 	      extraSpecialArgs = { inherit inputs; };
             };
           }
+
 	  sops-nix.nixosModules.sops
+	  disko.nixosModules.disko
+	  impermanence.nixosModules.impermanence
+
 	  globalprotect-openconnect.nixosModules.default
 	  {
 	    programs.globalprotect-openconnect.enable = true;
@@ -94,8 +99,8 @@
 
 	modules = [
 	  ./hosts/macbook/configuration.nix
-	  inputs.disko.nixosModules.disko
-	  inputs.impermanence.nixosModules.impermanence
+	  disko.nixosModules.disko
+	  impermanence.nixosModules.impermanence
 	];
       };
     };

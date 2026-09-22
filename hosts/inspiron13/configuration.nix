@@ -4,6 +4,7 @@
   imports =
     [
       ./hardware-configuration.nix
+      ./sops.nix
       ./../../modules/btrfs.nix
       ./../../modules/flatpak.nix
       ./../../modules/vm.nix
@@ -11,6 +12,7 @@
       ./../../modules/power.nix
       ./../../modules/librewolf.nix
       ./../../modules/waydroid.nix
+      ./../../modules/impermanence.nix # NOTE: DO NOT REMOVE THIS MODULE!!!!!
       inputs.home-manager.nixosModules.home-manager
       inputs.flatpaks.nixosModules.default
     ];
@@ -133,6 +135,8 @@
     xwayland.enable = true;
   };
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -198,12 +202,15 @@
   users.users.rommelvj = {
     isNormalUser = true;
     description = "Rommel Villamor Jr.";
+    hashedPasswordFile = config.sops.secrets.hashed-password.path;
     extraGroups = [ "networkmanager" "wheel" "wireshark" ];
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
     ];
   };
+
+  users.users.root.hashedPasswordFile = config.sops.secrets.hashed-password.path;
 
   services.smartd = {
     enable = true;
@@ -313,6 +320,7 @@
     age
     sops
     teams-for-linux
+    xdg-desktop-portal-hyprland
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -337,6 +345,7 @@
   services.blueman.enable = true;
 
   hardware.opentabletdriver.enable = true;
+  hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
   boot.kernelModules = [ "uinput" ];
   #boot.blacklistedKernelModules = [ "wacom" ];

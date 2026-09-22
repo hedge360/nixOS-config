@@ -1,16 +1,27 @@
-{ ... }:
+{ pkgs, inputs, config, ... }:
 
 {
+	imports = [ inputs.sops-nix.nixosModules.sops ];
+
 	sops = {
 		defaultSopsFile = ../../.sops.yaml;
 		age.sshKeyPaths = [];
-		age.keyFile = "/home/rommelvj/.config/sops/age/keys.txt";
+		age.keyFile = "/nix/persist/root/.config/sops/age/keys.txt";
 		
 		secrets = {
-			"wifi_password_hash" = {
-				sopsFile = ../../secrets/wifi-password-hash.yaml;
+			"wifi-keypass.env" = {
+				sopsFile = ../../secrets/wifi-keypass.yaml;
 				owner = "root";
 				group = "root";
+				mode = "0400";
+			};
+
+			"hashed-password" = {
+				sopsFile = ../../secrets/user-passwords.yaml;
+				neededForUsers = true;
+				owner = "root";
+				group = "root";
+				mode = "0400";
 			};
 		};
 	};

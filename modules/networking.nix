@@ -9,6 +9,8 @@
 	"btintel.disable_autosuspend=1"
     ];
 
+
+    networking.networkmanager.ensureProfiles.environmentFiles = [ config.sops.secrets."wifi-keypass.env".path ];
     networking.networkmanager.ensureProfiles.profiles = {
 	eduroam = {
 	    connection = {
@@ -29,8 +31,10 @@
 		identity = "rtvillamor@cpp.edu";
 		client-cert = "/etc/ssl/certs/eduroam/cert.pem";
 		private-key = "/etc/wpa_supplicant/private.key";
-		private-key-password = "K2lJadr6YzgKeEwjdKqrGsH4SHCHQf";
-		ca-cert = "/etc/ssl/certs/eduroam/usertrustrsaca [jdk].pem";
+		#private-key-password = "K2lJadr6YzgKeEwjdKqrGsH4SHCHQf";
+		private-key-password = "$private_key_password";
+		ca-cert = "/etc/ssl/certs/eduroam/usertrustrsaca.pem";
+		phase1-auth-flags = 32;
 	    };
 	    ipv4 = {
 		method = "auto";
@@ -110,6 +114,8 @@
         enable = true;
 	trustedInterfaces = [
 	    config.services.tailscale.interfaceName
+	    "virbr0"
+	    "CloudflareWARP"
 	];
         allowedTCPPorts = [ 80 443 ];
         allowedTCPPortRanges = [

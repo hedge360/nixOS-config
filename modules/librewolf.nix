@@ -86,4 +86,5 @@
 	    };
 	};
     };
+    environment.sessionVariables.DEFAULT_BROWSER = "${pkgs.librewolf}/bin/librewolf";
 }
