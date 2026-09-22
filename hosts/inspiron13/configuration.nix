@@ -76,6 +76,14 @@
   networking.hostName = "inspiron13-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
+  security.sudo.enable = false;
+  security.doas.enable = true;
+  security.doas.extraRules = [{
+    users = [ "rommelvj" ];
+    keepEnv = true;
+    persist = true;
+  }];
+
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
