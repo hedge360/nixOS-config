@@ -149,5 +149,6 @@
 	#v2raya
 	#xray
 	wireshark
+	OVMF
     ];
 }

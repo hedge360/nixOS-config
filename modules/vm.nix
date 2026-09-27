@@ -22,6 +22,10 @@
         "riscv64-linux"
     ];
 
+    boot.extraModprobeConfig = ''
+	options kvm_intel nested=1
+    '';
+
     virtualisation.containers.enable = true;
     virtualisation.podman = {
 	enable = true;
@@ -35,5 +39,6 @@
 	docker-compose
 	podman-compose
 	dnsmasq
+	OVMF
     ];
 }

@@ -90,10 +90,6 @@
         ];
       };
 
-      #rpi5-nixos = nixpkgs.lib.nixosSystem {
-	#code
-      #};
-
       macbook-nixos = nixpkgs.lib.nixosSystem {
 	specialArgs = { inherit inputs; };
 

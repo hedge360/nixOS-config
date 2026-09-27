@@ -43,6 +43,10 @@
                     install_url = "https://addons.mozilla.org/firefox/downloads/latest/spoof-timezone/latest.xpi";
                     installation_mode = "force_installed";
                 };
+		"helloyanis@ageverif-bypass" = {
+		    install-url = "https://addons.mozilla.org/firefox/downloads/latest/age-verification-bypass/latest.xpi";
+		    installation-mode = "force_installed";
+		};
             };
         };
     };
