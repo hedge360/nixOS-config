@@ -31,7 +31,6 @@
 		identity = "rtvillamor@cpp.edu";
 		client-cert = "/etc/ssl/certs/eduroam/cert.pem";
 		private-key = "/etc/wpa_supplicant/private.key";
-		#private-key-password = "K2lJadr6YzgKeEwjdKqrGsH4SHCHQf";
 		private-key-password = "$private_key_password";
 		ca-cert = "/etc/ssl/certs/eduroam/usertrustrsaca.pem";
 		phase1-auth-flags = 32;
