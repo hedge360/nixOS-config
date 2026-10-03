@@ -33,7 +33,7 @@
 		private-key = "/etc/wpa_supplicant/private.key";
 		private-key-password = "$private_key_password";
 		ca-cert = "/etc/ssl/certs/eduroam/usertrustrsaca.pem";
-		phase1-auth-flags = 32;
+		#phase1-auth-flags = 32;
 	    };
 	    ipv4 = {
 		method = "auto";
@@ -83,7 +83,7 @@
 
     environment.etc."systemd/resolved.conf.d/dnsproxy.conf".text = ''
         [Resolve]
-        DNS=127.1.0.0.1
+        DNS=127.0.0.1
         FallbackDNS=
         DNSStubListener=no
     '';
@@ -95,16 +95,17 @@
     services.dnsmasq = {
         enable = true;
         settings = {
-        port = 5353;
-        no-resolv = true;
-        bogus-priv = true;
-        strict-order = true;
-        server = [
-            "2606:4700:4700::1111"
-            "2606:4700:4700::1001"
-            "1.1.1.1"
-            "1.0.0.1"
-        ];
+	    port = 5353;
+	    listen-address = [ "127.0.0.1" ];
+	    no-resolv = true;
+            bogus-priv = true;
+	    strict-order = true;
+            server = [
+            	"2606:4700:4700::1111"
+            	"2606:4700:4700::1001"
+            	"1.1.1.1"
+            	"1.0.0.1"
+            ];
         };
     };
 
@@ -116,7 +117,7 @@
 	    "virbr0"
 	    "CloudflareWARP"
 	];
-        allowedTCPPorts = [ 80 443 ];
+        allowedTCPPorts = [ 80 443 config.services.tailscale.port ];
         allowedTCPPortRanges = [
         { from = 1714; to = 1764; } #KDE Connect
         #{ from = 45000; to = 60000; } #discord vc ports
@@ -140,7 +141,7 @@
 
     #Bypass internet censorship in China
     #For more information, visit https://github.com/v2rayA/v2rayA
-    #services.v2raya.enable = true;
+    services.v2raya.enable = true;
 
     programs.wireshark.enable = true;
 
