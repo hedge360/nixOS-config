@@ -12,5 +12,6 @@
 			"flathub:app/sh.ppy.osu//stable"
 			"flathub:app/us.zoom.Zoom//stable"
 		];
+		runWithoutGui = false;
 	};
 }

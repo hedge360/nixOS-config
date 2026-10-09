@@ -134,14 +134,14 @@
       gpg.format = "ssh";
       push = { autoSetupRemote = true; };
       credential.helper = "libsecret";
-    };
-    aliases = {
-      c = "commit";
-      s = "status";
-      a = "add";
-      p = "push";
-      cl = "clone";
-      pl = "pull";
+      alias = {
+        c = "commit";
+        s = "status";
+        a = "add";
+        p = "push";
+        cl = "clone";
+        pl = "pull";
+      };
     };
     signing = {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINMK/FzqpeeCt72mQxRcTlP5HLJshjybbQ0UIZKx8jM/ scion5u@gmail.com";
@@ -151,7 +151,19 @@
 
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
+    enableDefaultConfig = false;
+    settings."*" = {
+      ForwardAgent = false;
+      addKeysToAgent = "yes";
+      Compression = false;
+      ServerAliveInterval = 0;
+      ServerAliveCountMax = 3;
+      HashKnownHosts = false;
+      UserKnownHostsFile = "~/.ssh/known_hosts";
+      ControlMaster = "no";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "no";
+    };
   };
 /*
   programs.neovim = {
