@@ -77,6 +77,7 @@
 			"/var/lib/systemd"
 			"/var/lib/tailscale"
 			"/var/lib/waydroid"
+			"/var/lib/sbctl"
 			"/var/log"
 			"/root/.ssh"
 		];

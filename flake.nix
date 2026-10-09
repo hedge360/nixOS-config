@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    #REMEMBER
+    #NOTE
     #Pinning a package is as shown below:
     #nixpkgs.url = "github:nixos/nixpkgs/<commit-hash>";
     #<commit-hash> replaces nixos-unstable
@@ -36,9 +36,11 @@
     };
 
     impermanence.url = "github:nix-community/impermanence";
+
+    nixvim.url = "github:nix-community/nixvim";
   };
 
-  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, disko, impermanence, ... } @inputs:
+  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, disko, impermanence, nixvim, ... } @inputs:
   let
     system = "x86_64-linux";
     arm-system = "aarch64-linux";
@@ -87,6 +89,7 @@
 	      nixpkgs.legacyPackages.${system}.gnomeExtensions.appindicator
 	    ];
 	  }
+	  nixvim.nixosModules.nixvim
         ];
       };
 

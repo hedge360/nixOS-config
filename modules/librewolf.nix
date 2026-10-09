@@ -19,6 +19,8 @@
                 "privacy.trackingprotection.socialtracking.enabled" = true;
                 "privacy.resistFingerprinting.letterboxing" = true;
 		"media.peerconnection.enabled" = false;
+		"browser.newtabpage.activity-stream.newtabWallpapers.customWallpaper.fileSize" = 1;
+		"browser.newtabpage.activity-stream.newtabWallpapers.customWallpaper.fileSize.enabled" = true;
             };
             ExtensionSettings = {
                 #Bitwarden
@@ -46,6 +48,10 @@
 		"helloyanis@ageverif-bypass" = {
 		    install-url = "https://addons.mozilla.org/firefox/downloads/latest/age-verification-bypass/latest.xpi";
 		    installation-mode = "force_installed";
+		};
+		"extension@tabliss.io" = {
+		    install_url = "https://addons.mozilla.org/firefox/downloads/latest/tabliss/latest.xpi";
+		    installation-mode = "force-installed";
 		};
             };
         };

@@ -35,9 +35,13 @@
     };
     limine = {
       efiSupport = true;
+      secureBoot.enable = true;
       #style.wallpapers = [
 	#"/boot/limine/wallpapers/wallpapers-birdSilhouette.jpg"
       #];
+      extraConfig = ''
+        measured_boot: yes
+      '';
     };
   };
 
@@ -83,6 +87,12 @@
     keepEnv = true;
     persist = true;
   }];
+
+  security.tpm2 = {
+    enable = true;
+    pkcs11.enable = true;
+    tctiEnvironment.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -211,7 +221,7 @@
     isNormalUser = true;
     description = "Rommel Villamor Jr.";
     hashedPasswordFile = config.sops.secrets.hashed-password.path;
-    extraGroups = [ "networkmanager" "wheel" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" "wireshark" "tss" ];
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
@@ -247,6 +257,47 @@
     #localNetworkGameTransfers.openFirewall = true;
   };
 
+  programs.obs-studio = {
+    enable = true;
+    enableVirtualCamera = true;
+    plugins = with pkgs.obs-studio-plugins; [ 
+      wlrobs
+      obs-pipewire-audio-capture
+      obs-gstreamer
+      obs-vkcapture
+    ];
+  };
+/*
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+*/
+  programs.nixvim = {
+    enable = true;
+    defaultEditor = true;
+    opts.number = true;
+    viAlias = true;
+    vimAlias = true;
+    colorschemes.catppuccin = {
+      enable = true;
+      autoLoad = true;
+      settings = {
+	flavour = "mocha";
+	integrations.nvimtree = true;
+	integrations.treesitter = true;
+	term_colors = true;
+      };
+    };
+    extraConfigLuaPost = ''
+      vim.cmd([[
+        colorscheme catppuccin-mocha
+      ]])
+    '';
+  };
+
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
     kdePackages.korganizer
@@ -256,18 +307,16 @@
     hyprshutdown
     git
     #vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    neovim
     wget
     discord-development
     element-desktop
     tlp
     kdePackages.kdeconnect-kde
     flatpak
-    obs-studio
     lm_sensors
     kdePackages.kdenlive
     hplip
-    #gimp
+    gimp
     spotify
     bibata-cursors
     kdePackages.partitionmanager
@@ -329,6 +378,9 @@
     sops
     teams-for-linux
     xdg-desktop-portal-hyprland
+    tree
+    sbctl
+    ssh-tpm-agent
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
