@@ -56,7 +56,7 @@
             };
         };
     };
-
+/*
     programs.firejail = {
 	enable = true;
 	wrappedBinaries = {
@@ -68,6 +68,10 @@
 		    #"--ignore=private-dev"
 		    "--dbus-user.talk=org.freedesktop.Notifications"
 		];
+	    };
+	    tor-browser = {
+		executable = "${pkgs.tor-browser}/bin/tor-browser";
+		profile = "${pkgs.firejail}/etc/firejail/tor-browser.profile";
 	    };
 	};
     };
@@ -83,7 +87,7 @@
 
 	ignore nodbus
     '';
-
+*/
     home-manager.users.rommelvj = {
 	xdg.mimeApps = {
 	    enable = true;

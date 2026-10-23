@@ -135,6 +135,10 @@
 
   #Enable OpenGL
   hardware.graphics.enable = true;
+  hardware.graphics.extraPackages = with pkgs; [ 
+    intel-media-driver
+    pocl
+  ];
   #hardware.opengl.driSupport32Bit = true;
 
   # Enable the X11 windowing system.
@@ -151,6 +155,7 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+    #portalPackage = pkgs.xdg-desktop-portal-wlr;
   };
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -192,6 +197,9 @@
     enablePersistence = true;
     #enableBluetooth = true;
   };
+  boot.extraModprobeConfig = ''
+    options snd slots=snd-hda-intel
+  '';
 
 /*
   services.mpd = {
@@ -259,7 +267,7 @@
 
   programs.obs-studio = {
     enable = true;
-    enableVirtualCamera = true;
+    #enableVirtualCamera = true;
     plugins = with pkgs.obs-studio-plugins; [ 
       wlrobs
       obs-pipewire-audio-capture
@@ -267,18 +275,13 @@
       obs-vkcapture
     ];
   };
-/*
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-*/
+
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
     opts.number = true;
+    opts.relativenumber = true;
+    opts.shiftwidth = 4;
     viAlias = true;
     vimAlias = true;
     colorschemes.catppuccin = {
@@ -297,6 +300,8 @@
       ]])
     '';
   };
+
+  programs.gpu-screen-recorder.enable = true;
 
   environment.systemPackages = with pkgs; [
     kdePackages.kdepim-addons
@@ -377,10 +382,12 @@
     age
     sops
     teams-for-linux
-    xdg-desktop-portal-hyprland
     tree
     sbctl
     ssh-tpm-agent
+    tor-browser
+    zoom-us
+    #xdg-desktop-portal-hyprland
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

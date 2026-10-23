@@ -21,6 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    caelestia-cli = {
+      url = "github:caelestia-dots/cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flatpaks.url = "github:in-a-dil-emma/declarative-flatpak/latest";
 
     sops-nix = {
@@ -40,7 +45,7 @@
     nixvim.url = "github:nix-community/nixvim";
   };
 
-  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, flatpaks, sops-nix, globalprotect-openconnect, disko, impermanence, nixvim, ... } @inputs:
+  outputs = { self, nixpkgs, home-manager, kwin-effects-better-blur-dx, caelestia-shell, caelestia-cli, flatpaks, sops-nix, globalprotect-openconnect, disko, impermanence, nixvim, ... } @inputs:
   let
     system = "x86_64-linux";
     arm-system = "aarch64-linux";
@@ -90,7 +95,7 @@
 	    ];
 	  }
 	  nixvim.nixosModules.nixvim
-        ];
+	];
       };
 
       macbook-nixos = nixpkgs.lib.nixosSystem {

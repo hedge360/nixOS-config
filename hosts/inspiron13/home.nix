@@ -62,7 +62,8 @@
   
   programs.caelestia = {
     enable = true;
-    cli.enable = true;
+    package = lib.mkForce inputs.caelestia-shell.packages.${pkgs.system}.default;
+    cli.enable = false;
     systemd.enable = false;
     settings = {
 	#settings to enable
@@ -165,45 +166,4 @@
       ControlPersist = "no";
     };
   };
-/*
-  programs.neovim = {
-    enable = true;
-    withRuby = true;
-    withPython3 = true;
-    extraConfig = ''
-        set number
-	syntax on
-    '';
-    viAlias = true;
-    vimAlias = true;
-    plugins = with pkgs.vimPlugins; [
-	nvim-treesitter
-	{
-	    plugin = nvim-treesitter;
-	    type = "lua";
-	    config = ''
-		require('nvim-treesitter').setup {
-		    highlight = {
-		    	enable = true,
-		    },
-		    indent = {
-		        enable = true,
-		    },
-		}
-	    '';
-	}
-	nvim-java
-	catppuccin-nvim
-	{
-	    plugin = catppuccin-nvim;
-	    type = "lua";
-	    config = ''
-	        require("catppuccin").setup({
-		    flavour = "mocha",
-		})
-		vim.cmd.colorscheme "catppuccin"
-	    '';
-	}
-    ];
-  };*/
 }
