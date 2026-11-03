@@ -62,8 +62,7 @@
   
   programs.caelestia = {
     enable = true;
-    package = lib.mkForce inputs.caelestia-shell.packages.${pkgs.system}.default;
-    cli.enable = false;
+    cli.enable = true;
     systemd.enable = false;
     settings = {
 	#settings to enable

@@ -17,6 +17,7 @@
 
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
+  networking.enableB43Firmware = true;
 
   networking.networkmanager.ensureProfiles.profiles = {
     eduroam = {
@@ -47,19 +48,18 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.permittedInsecurePackages = [
+  #  "broadcom-sta-6.30.223.271-63-7.2.11"
+  #];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
-    kernelModules = [ "wl" ]; #b43 or wl
-    initrd.kernelModules = [ "kvm-intel" "wl" ];
+    kernelPackages = pkgs.linuxPackages_7_2;
+    #extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+    #kernelModules = [ "b43" ]; #b43 or wl
+    initrd.kernelModules = [ "kvm-intel" ];
   };
 
   security.lockKernelModules = true;
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-63-7.2.6"
-  ];
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
