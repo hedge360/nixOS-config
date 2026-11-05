@@ -9,7 +9,7 @@
 	"btintel.disable_autosuspend=1"
     ];
 
-
+/*
     networking.networkmanager.ensureProfiles.environmentFiles = [ config.sops.secrets."wifi-keypass.env".path ];
     networking.networkmanager.ensureProfiles.profiles = {
 	eduroam = {
@@ -43,7 +43,7 @@
 	    };
 	};
     };
-    
+  */  
     services.dnsproxy = {
         enable = true;
         settings = {

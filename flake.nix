@@ -93,6 +93,46 @@
 	];
       };
 
+      thinkpadt14-nixos = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+
+        modules = [
+          ./hosts/thinkpadt14/configuration.nix
+          {
+            environment.systemPackages = [
+              kwin-effects-better-blur-dx.packages.${system}.default
+            ];
+          }
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+	      backupFileExtension = "backup";
+              users.rommelvj = import ./hosts/thinkpadt14/home.nix;
+	      sharedModules = [
+	        inputs.caelestia-shell.homeManagerModules.default
+	      ];
+	      extraSpecialArgs = { inherit inputs; };
+            };
+          }
+
+	  sops-nix.nixosModules.sops
+	  disko.nixosModules.disko
+	  impermanence.nixosModules.impermanence
+
+	  globalprotect-openconnect.nixosModules.default
+	  {
+	    programs.globalprotect-openconnect.enable = true;
+	    environment.systemPackages = [
+	      nixpkgs.legacyPackages.${system}.gnomeExtensions.appindicator
+	    ];
+	  }
+	  nixvim.nixosModules.nixvim
+	];
+      };
+
       macbook-nixos = nixpkgs.lib.nixosSystem {
 	specialArgs = { inherit inputs; };
 

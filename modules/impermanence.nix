@@ -19,7 +19,7 @@
 
 			script = ''
 				mkdir /btrfs_tmp
-				mount /dev/disk/by-partlabel/root /btrfs_tmp
+				mount /dev/disk/by-uuid/79f2f823-1c5d-48ca-932b-dda2cb721bbb /btrfs_tmp
 				if [[ -e /btrfs_tmp/root ]]; then
 					mkdir -p /btrfs_tmp/old_roots
 					timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+@%Y-%m-%-d_%H:%M:%S")
@@ -70,6 +70,7 @@
 			"/var/lib/cloudflare-warp"
 			"/var/lib/cups"
 			"/var/lib/flatpak"
+			"/var/lib/fprint"
 			"/var/lib/libvirt"
 			"/var/lib/nixos"
 			"/var/lib/qemu"

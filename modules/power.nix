@@ -8,7 +8,7 @@
     services.tlp = {
         enable = true;
         settings = {
-	    CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-performance"; #power for max battery but little performance, balance-performance for casual/home use, performance is self explanatory
+	    CPU_ENERGY_PERF_POLICY_ON_BAT = "balance-power"; #power for max battery but little performance, balance-performance for casual/home use, performance is self explanatory
             CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
 
             #PLATFORM_PROFILE_ON_BAT = "low-power";

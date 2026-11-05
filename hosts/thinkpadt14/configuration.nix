@@ -5,6 +5,7 @@
     [
       ./hardware-configuration.nix
       ./sops.nix
+      ./eduroam.nix
       ./../../modules/btrfs.nix
       ./../../modules/flatpak.nix
       ./../../modules/vm.nix
@@ -60,14 +61,14 @@
 
   boot.plymouth.enable = false;
 
-  boot.resumeDevice = "/dev/disk/by-uuid/f9c46821-1297-426b-92d2-b47bc94a6fa5";
+  boot.resumeDevice = "/dev/disk/by-uuid/51d585fe-2edb-4842-9907-2902875b9304";
 
   powerManagement.enable = true;
 
   hardware.acpilight.enable = true;
 
   swapDevices = [{
-    device = "/dev/disk/by-uuid/f9c46821-1297-426b-92d2-b47bc94a6fa5";
+    device = "/dev/disk/by-uuid/51d585fe-2edb-4842-9907-2902875b9304";
   }];
 
   boot.kernel.sysctl = {
@@ -77,7 +78,7 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "inspiron13-nixos"; # Define your hostname.
+  networking.hostName = "thinkpadt14-nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   security.sudo.enable = false;
@@ -93,6 +94,8 @@
     pkcs11.enable = true;
     tctiEnvironment.enable = true;
   };
+
+  services.fprintd.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -157,6 +160,7 @@
     xwayland.enable = true;
     #portalPackage = pkgs.xdg-desktop-portal-wlr;
   };
+  environment.sessionVariables.HYPRLAND_NO_RT = "1";
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -240,11 +244,11 @@
 
   services.smartd = {
     enable = true;
-    devices = [
-      {
-        device = "/dev/disk/by-id/ata-WD_Blue_SA510_M.2_2280_500GB_241334801358";
-      }
-    ];
+    #devices = [
+    #  {
+    #    device = "/dev/disk/by-id/ata-WD_Blue_SA510_M.2_2280_500GB_241334801358";
+    #  }
+    #];
   };
 
   # Allow unfree packages
@@ -388,6 +392,7 @@
     tor-browser
     zoom-us
     #xdg-desktop-portal-hyprland
+    bitwarden-desktop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -405,7 +410,7 @@
     pinentryPackage = pkgs.pinentry-qt;
   };
 
-  #services.openssh.enable = true;
+  services.openssh.enable = false;
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;

@@ -9,15 +9,15 @@
 		age.keyFile = "/nix/persist/root/.config/sops/age/keys.txt";
 		
 		secrets = {
-			"wifi-keypass.env" = {
-				sopsFile = ../../secrets/wifi-keypass.yaml;
+			"thinkpad-wifi-keypass.env" = {
+				sopsFile = ../../secrets/thinkpad-wifi-keypass.yaml;
 				owner = "root";
 				group = "root";
 				mode = "0400";
 			};
 
 			"hashed-password" = {
-				sopsFile = ../../secrets/user-passwords.yaml;
+				sopsFile = ../../secrets/thinkpad-user-passwords.yaml;
 				neededForUsers = true;
 				owner = "root";
 				group = "root";

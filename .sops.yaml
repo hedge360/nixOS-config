@@ -1,12 +1,10 @@
 keys:
-  - &personal_age_key age1qm06hndg2787uqfs00fkstz00nhvtee3lx50kzajhwupyhag29fqj7v3xt
-  - &root_age_key age16sdhus5em2xqd5t7sx8334h80d0kd2a5pe08mmet43y6g88fn57qh6rzen
+  - &root_age_key age1auyrsjlzklmamq038np2z9v5uhff694z92z0k5tehww8j56p2s8qtvfcmn
 
 creation_rules:
   - path_regex: "secrets/.*\\.yaml$"
     key_groups:
       - age:
-          - *personal_age_key
           - *root_age_key
 
 #Documentation:
