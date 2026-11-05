@@ -5,6 +5,7 @@
     [
       ./hardware-configuration.nix
       ./sops.nix
+      ./eduroam.nix
       ./../../modules/btrfs.nix
       ./../../modules/flatpak.nix
       ./../../modules/vm.nix
